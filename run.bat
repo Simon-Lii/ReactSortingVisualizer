@@ -1,0 +1,2 @@
+cd sorting
+npm start
