@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nav, Navbar, NavDropdown, Container } from 'react-bootstrap';
 import { getMergeSortAnimations } from '../sortingAlgorithms/sortingAlgorithms.js';
-import { SketchPicker } from 'react-color';
+import { ChromePicker } from 'react-color';
 import './SortingVisualizer.css';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ import styled from 'styled-components';
 const NUMBER_OF_ARRAY_BARS = 310;
 
 // This is the main color of the array bars.
-const PRIMARY_COLOR = 'turquoise';
+const PRIMARY_COLOR = '#77E9DC';
 
 // This is the color of array bars that are being compared throughout the animations.
 const SECONDARY_COLOR = 'red';
@@ -68,7 +68,12 @@ export default class SortingVisualizer extends React.Component {
     array: [],
     sliderValue: STARTING_ARRAY_BARS_VALUE,
     speed: (MAX_SPEED - STARTING_DISPLAY_SPEED) / SPEED_SCALING_FACTOR,
-    displaySpeed: STARTING_DISPLAY_SPEED
+    displaySpeed: STARTING_DISPLAY_SPEED,
+    theme: PRIMARY_COLOR
+  };
+
+  handleChangeComplete = (color) => {
+    this.setState({ theme: color.hex });
   };
 
 
@@ -95,7 +100,7 @@ export default class SortingVisualizer extends React.Component {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+        const color = i % 3 === 0 ? SECONDARY_COLOR : this.state.theme;
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
@@ -175,9 +180,9 @@ export default class SortingVisualizer extends React.Component {
                     <input type="range" min={1} max={100} value={this.state.displaySpeed} className="slider" onChange={this.handleOnChangeSpeed} />
                     <div className="value"> Speed {this.state.displaySpeed}</div>
                   </Styles>
-                  <button class="btn btn-primary" onClick={() => this.resetArray()}>Generate New Array</button>
-                  <button class="btn btn-success" onClick={() => this.bubbleSort()}>Play</button>
-                  <button class="btn btn-danger" onClick={() => this.bubbleSort()}>Stop</button>
+                  <button className="btn btn-primary" onClick={() => this.resetArray()}>Generate New Array</button>
+                  <button className="btn btn-success" onClick={() => this.bubbleSort()}>Play</button>
+                  <button className="btn btn-danger" onClick={() => this.bubbleSort()}>Stop</button>
                   <NavDropdown title="Choose sorting algorithm" id="basic-nav-dropdown">
                     <button onClick={() => this.mergeSort()}>Merge Sort</button>
                     <button onClick={() => this.quickSort()}>Quick Sort</button>
@@ -186,7 +191,10 @@ export default class SortingVisualizer extends React.Component {
                     <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
                   </NavDropdown>
                   <NavDropdown title="Choose color theme" id="basic-nav-dropdown">
-                    <SketchPicker />
+                    <ChromePicker 
+                      color={ this.state.theme }
+                      onChangeComplete={ this.handleChangeComplete }
+                    />
                   </NavDropdown>
                 </Nav>
               </Navbar.Collapse>
@@ -199,7 +207,7 @@ export default class SortingVisualizer extends React.Component {
               className="array-bar"
               key={idx}
               style={{
-                backgroundColor: PRIMARY_COLOR,
+                backgroundColor: this.state.theme,
                 height: `${value}px`,
               }}></div>
           ))}
