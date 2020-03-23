@@ -6,7 +6,7 @@ import './SortingVisualizer.css';
 import styled from 'styled-components';
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 310;
+const NUMBER_OF_ARRAY_BARS = 200;
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = '#77E9DC';
@@ -69,7 +69,9 @@ export default class SortingVisualizer extends React.Component {
     sliderValue: STARTING_ARRAY_BARS_VALUE,
     speed: (MAX_SPEED - STARTING_DISPLAY_SPEED) / SPEED_SCALING_FACTOR,
     displaySpeed: STARTING_DISPLAY_SPEED,
-    theme: PRIMARY_COLOR
+    theme: PRIMARY_COLOR,
+    algo: "this.mergeSort()",
+    play: true
   };
 
   handleChangeComplete = (color) => {
@@ -131,10 +133,6 @@ export default class SortingVisualizer extends React.Component {
 
   }
 
-  stop() {
-
-  }
-
   // NOTE: This method will only work if your sorting algorithms actually return
   // the sorted arrays; if they return the animations (as they currently do), then
   // this method will be broken.
@@ -161,6 +159,14 @@ export default class SortingVisualizer extends React.Component {
     this.setState({ displaySpeed: e.target.value })
   }
 
+  handleOnChangeStop() {
+    this.setState({ play: false })
+  }
+
+  mergeSortSet() {
+    this.setState({ algo: "this.mergeSort()" })
+  }
+
   render() {
     const { array } = this.state;
     return (
@@ -168,34 +174,53 @@ export default class SortingVisualizer extends React.Component {
         <div className="navbar-container">
           <Container>
             <Navbar bg="dark" expand="sm" fixed="top" variant="dark">
-              <Navbar.Brand href="#home">React Bootstrap Visualizer</Navbar.Brand>
+              <Navbar.Brand href="#home">
+                <button type="button" className="btn btn-outline-info">
+                  <div className="value">React Bootstrap Visualizer</div>
+                </button>
+              </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
+                  <p className="invisibleSpace">aaaaaaaaaa</p>
                   <Styles opacity={this.state.sliderValue > 0 ? (this.state.sliderValue) : .1} color={this.props.color}>
+                    ___
+                    <div className="value">Size:{this.state.sliderValue}</div>
+                    ___
                     <input type="range" min={5} max={NUMBER_OF_ARRAY_BARS} value={this.state.sliderValue} className="slider" onChange={this.handleOnChangeSize} />
-                    <div className="value">Size{this.state.sliderValue}</div>
                   </Styles>
+                  <p className="invisibleSpace">aaaaaaaaaa</p>
                   <Styles opacity={this.state.displaySpeed > 0 ? (this.state.displaySpeed) : .1} color={this.props.color}>
+                    ___
+                    <div className="value"> Speed:{this.state.displaySpeed}</div>
+                    ___
                     <input type="range" min={1} max={100} value={this.state.displaySpeed} className="slider" onChange={this.handleOnChangeSpeed} />
-                    <div className="value"> Speed {this.state.displaySpeed}</div>
                   </Styles>
-                  <button className="btn btn-primary" onClick={() => this.resetArray()}>Generate New Array</button>
-                  <button className="btn btn-success" onClick={() => this.bubbleSort()}>Play</button>
-                  <button className="btn btn-danger" onClick={() => this.bubbleSort()}>Stop</button>
-                  <NavDropdown title="Choose sorting algorithm" id="basic-nav-dropdown">
-                    <button onClick={() => this.mergeSort()}>Merge Sort</button>
-                    <button onClick={() => this.quickSort()}>Quick Sort</button>
-                    <NavDropdown.Divider />
-                    <button onClick={() => this.heapSort()}>Heap Sort</button>
-                    <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-                  </NavDropdown>
-                  <NavDropdown title="Choose color theme" id="basic-nav-dropdown">
-                    <ChromePicker 
-                      color={ this.state.theme }
-                      onChangeComplete={ this.handleChangeComplete }
-                    />
-                  </NavDropdown>
+                  <p className="invisibleSpace">aaaaaaaaaa</p>
+                  <button className="btn btn-outline-primary" onClick={() => this.resetArray()}><div className="value">Generate new array</div></button>
+                  <p className="invisibleSpace">a</p>
+                  <button className="btn btn-outline-success" onClick={() => eval(this.state.algo)}><div className="value">Play</div></button>
+                  <p className="invisibleSpace">a</p>
+                  <button className="btn btn-outline-danger" onClick={() => this.handleOnChangeStop()}><div className="value">Stop</div></button>
+                  <p className="invisibleSpace">aaaaaaaaaa</p>
+                  <button className="btn btn-outline-secondary">
+                    <NavDropdown title="Choose sorting algorithm" id="basic-nav-dropdown_algo">
+                      <button onClick={() => this.mergeSortSet()}>Merge Sort</button>
+                      <button onClick={() => this.quickSort()}>Quick Sort</button>
+                      <NavDropdown.Divider />
+                      <button onClick={() => this.heapSort()}>Heap Sort</button>
+                      <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+                    </NavDropdown>
+                  </button>
+                  <p className="invisibleSpace">aaaaaaaaaa</p>
+                  <button className="btn btn-outline-warning">
+                    <NavDropdown title="Choose color theme" id="basic-nav-dropdown_color">
+                      <ChromePicker
+                        color={this.state.theme}
+                        onChangeComplete={this.handleChangeComplete}
+                      />
+                    </NavDropdown>
+                  </button>
                 </Nav>
               </Navbar.Collapse>
             </Navbar>

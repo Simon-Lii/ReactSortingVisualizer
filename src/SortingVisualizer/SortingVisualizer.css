@@ -1,12 +1,26 @@
 .array-container {
   position: absolute;
-  left: 100px;
+  left: 70px;
   top: 100px;
 }
 
 .array-bar {
-  width: 2px;
+  width: 8px;
   display: inline-block;
   margin: 0 1px;
+}
+
+.value {
+  color:white;
+  letter-spacing: 3px;
+}
+
+.invisibleSpace{
+  color: #343a40;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a,.navbar-default .navbar-nav .open .dropdown-menu {
+  background-color: #3344ff;
+  color:#ffffff;
 }
 
